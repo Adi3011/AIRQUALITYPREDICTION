@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html >
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
+<head>
+  <meta charset="UTF-8">
+  <title>ML API</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  
+</head>
+
+<body>
+ <div class="login">
+	<h1>Predict Air Quality Index</h1>
+
+     <!-- Main Input For Receiving Query to our ML -->
+    <form action="{{ url_for('predict')}}"method="post">
+    	<input type="text" name="Average temperature" placeholder="Average temperature" required="required" />
+      <input type="text" name="Max temperature" placeholder="Max temperature" required="required" />
+		  <input type="text" name="Min Temperature" placeholder="Min temperature" required="required" />
+		  <input type="text" name="Atmospheric pressure at sea level" placeholder="Atmospheric pressure at sea level" required="required" />
+		  <input type="text" name="Humidity" placeholder="humidity" required="required" />
+		  <input type="text" name="Average Visibilty" placeholder="Average Visibility" required="required" />
+		  <input type="text" name="velocity of wind" placeholder="velocity of wind" required="required" />
+		  <input type="text" name="Max substained wind speed" placeholder="Max substained wind speed" required="required" />
+
+        <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+    </form>
+
+   <br>
+   <br>
+   {{ prediction_text }}
+
+ </div>
+
+
+</body>
+</html>
