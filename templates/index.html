@@ -1,40 +1,175 @@
 <!DOCTYPE html>
-<html >
-<!--From https://codepen.io/frytyler/pen/EGdtg-->
-<head>
-  <meta charset="UTF-8">
-  <title>ML API</title>
-  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-  
-</head>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+    <title>AQI</title>
+    <style>
+      * {
+        user-select: none;
+      }
+      body {
+        background-color: whitesmoke;
+      }
+      .main-card {
+        background-color: white;
+      }
+    </style>
+  </head>
 
-<body>
- <div class="login">
-	<h1>Predict Air Quality Index</h1>
-
-     <!-- Main Input For Receiving Query to our ML -->
-    <form action="{{ url_for('predict')}}"method="post">
-    	<input type="text" name="Average temperature" placeholder="Average temperature" required="required" />
-      <input type="text" name="Max temperature" placeholder="Max temperature" required="required" />
-		  <input type="text" name="Min Temperature" placeholder="Min temperature" required="required" />
-		  <input type="text" name="Atmospheric pressure at sea level" placeholder="Atmospheric pressure at sea level" required="required" />
-		  <input type="text" name="Humidity" placeholder="humidity" required="required" />
-		  <input type="text" name="Average Visibilty" placeholder="Average Visibility" required="required" />
-		  <input type="text" name="velocity of wind" placeholder="velocity of wind" required="required" />
-		  <input type="text" name="Max substained wind speed" placeholder="Max substained wind speed" required="required" />
-
-        <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
-    </form>
-
-   <br>
-   <br>
-   {{ prediction_text }}
-
- </div>
-
-
-</body>
+  <body>
+    <div class="container p-5">
+      <div class="row">
+        <div class="main-card col border shadow rounded pt-4 px-4 mx-5">
+          <div class="row">
+            <div class="col d-flex justify-content-center">
+              <h1 class="display-5">Air Quality Index Prediction</h1>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col p-5">
+              <form action="{{ url_for('predict')}}" method="post" class="row">
+                <div class="mb-3 col-6">
+                  <label for="avgTemp" class="form-label"
+                    >Average Temperature</label
+                  >
+                  <input
+                    type="text"
+                    name="Average temperature"
+                    placeholder="in Kelvin"
+                    required
+                    class="form-control"
+                    id="avgTemp"
+                  />
+                </div>
+                <div class="mb-3 col-6">
+                  <label for="maxTemp" class="form-label"
+                    >Maximum Temperature</label
+                  >
+                  <input
+                    class="form-control"
+                    id="maxTemp"
+                    type="text"
+                    name="Max temperature"
+                    placeholder="in Kelvin"
+                    required
+                  />
+                </div>
+                <div class="mb-3 col-6">
+                  <label for="minTemp" class="form-label"
+                    >Minimum Temperature</label
+                  >
+                  <input
+                    class="form-control"
+                    id="minTemp"
+                    type="text"
+                    name="Min temperature"
+                    placeholder="in Kelvin"
+                    required
+                  />
+                </div>
+                <div class="mb-3 col-6">
+                  <label for="atmpressure" class="form-label"
+                    >Atmospheric pressure at sea level</label
+                  >
+                  <input
+                    class="form-control"
+                    id="atmpressure"
+                    type="text"
+                    name="Atmospheric pressure at sea level"
+                    placeholder="in Pascal"
+                    required
+                  />
+                </div>
+                <div class="mb-3 col-6">
+                  <label for="humidity" class="form-label">Humidity</label>
+                  <input
+                    class="form-control"
+                    id="humidity"
+                    type="text"
+                    name="Humidity"
+                    placeholder="in g/kg"
+                    required
+                  />
+                </div>
+                <div class="mb-3 col-6">
+                  <label for="avgvis" class="form-label"
+                    >Average Visibilty</label
+                  >
+                  <input
+                    class="form-control"
+                    id="avgvis"
+                    type="text"
+                    name="Average Visibilty"
+                    placeholder="in metres"
+                    required
+                  />
+                </div>
+                <div class="mb-3 col-6">
+                  <label for="velwind" class="form-label"
+                    >Velocity of wind</label
+                  >
+                  <input
+                    class="form-control"
+                    id="velwind"
+                    type="text"
+                    name="velocity of wind"
+                    placeholder="in m/s"
+                    required
+                  />
+                </div>
+                <div class="mb-3 col-6">
+                  <label for="maxwind" class="form-label"
+                    >Max substained wind speed</label
+                  >
+                  <input
+                    class="form-control"
+                    id="maxwind"
+                    type="text"
+                    name="Max substained wind speed"
+                    placeholder="in m/s"
+                    required
+                  />
+                </div>
+                <div class="mb-3 col-12">
+                  <label for="maxwind" class="form-label"
+                    >Select the model for Prediction</label
+                  >
+                  <select
+                    class="form-select"
+                    aria-label="Model for Prediction"
+                    name="model"
+                    required
+                  >
+                    <option value="random_forest_prediction" selected>
+                      Random Forest
+                    </option>
+                    <option value="knn_prediction">KNN</option>
+                    <option value="ann_prediction">ANN</option>
+                  </select>
+                </div>
+                <div class="col-6 d-flex justify-content-center pt-1">
+                  <strong>{{ prediction }}</strong>
+                </div>
+                <div class="col-6 d-flex justify-content-center">
+                  <button type="submit" class="btn btn-primary">Predict</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>
