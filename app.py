@@ -1,26 +1,37 @@
 import numpy as np
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, render_template
 import pickle
 
+# Initializing App
 app = Flask(__name__)
-model = pickle.load(open('model.pkl', 'rb'))
+
+# Loading Models
+random_forest_model = pickle.load(open('mlModels/random_forest.pkl', 'rb'))
+knn_model = pickle.load(open('mlModels/knnr.pkl', 'rb'))
+ann_model = pickle.load(open('mlModels/ann.pkl', 'rb'))
+
+# Routes
+
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
-@app.route('/predict',methods=['POST'])
+
+@app.route('/predict', methods=['POST'])
 def predict():
-    '''
-    For rendering results on HTML GUI
-    '''
+    model = request.form.get('model')
     int_features = [x for x in request.form.values()]
-    final_features = [np.array(int_features)]
-    prediction = model.predict(final_features)
-
-    output = prediction[0]
-
-    return render_template('index.html', prediction_text='The air quality index is  {}'.format(output))
+    final_features = [np.array(int_features[:-1])]
+    if(model == 'random_forest_prediction'):
+        prediction = random_forest_model.predict(final_features)
+    elif(model == 'knn_prediction'):
+        prediction = knn_model.predict(final_features)
+    elif(model == 'ann_prediction'):
+        prediction = knn_model.predict(final_features)
+    else:
+        prediction = 'Something went Wrong!'
+    return render_template('index.html', prediction='AQI: {:.2f}'.format(prediction[0]), predicted=True)
 
 
 if __name__ == "__main__":
