@@ -137,7 +137,7 @@
                     required
                   />
                 </div>
-                <div class="mb-3 col-12">
+                <div class="mb-3 col-8">
                   <label for="maxwind" class="form-label"
                     >Select the model for Prediction</label
                   >
@@ -154,22 +154,93 @@
                     <option value="ann_prediction">ANN</option>
                   </select>
                 </div>
-                <div class="col-6 d-flex justify-content-center pt-1">
-                  <strong>{{ prediction }}</strong>
-                </div>
-                <div class="col-6 d-flex justify-content-center">
-                  <button type="submit" class="btn btn-primary">Predict</button>
+                <div
+                  class="col-4 d-flex justify-content-center align-items-center"
+                >
+                  <button
+                    type="submit"
+                    class="btn btn-primary btn-block px-5 mt-3"
+                  >
+                    Predict
+                  </button>
                 </div>
               </form>
             </div>
           </div>
         </div>
       </div>
+      <div class="row mt-5">
+        <div class="col-6 p-5">
+          <div id="AQI-meter"></div>
+        </div>
+        <div class="col-6 p-5 mt-3">
+          {% if prediction <= 50 %}
+          <div class="card border-success mb-3" style="max-width: 18rem">
+            <div class="card-header">{{prediction}}</div>
+            <div class="card-body text-success">
+              <p class="card-text">
+                Healthy. <br />
+                Enjoy.
+              </p>
+            </div>
+          </div>
+          {% elif prediction > 50 and prediction <= 150 %}
+          <div class="card border-warning mb-3" style="max-width: 18rem">
+            <div class="card-header">{{prediction}}</div>
+            <div class="card-body text-warning">
+              <p class="card-text">
+                Moderate. <br />
+                Go out with caution.
+              </p>
+            </div>
+          </div>
+          {% else %}
+          <div class="card border-danger mb-3" style="max-width: 18rem">
+            <div class="card-header">{{prediction}}</div>
+            <div class="card-body text-danger">
+              <p class="card-text">
+                Very Dagerous.<br />
+                Dont go out
+              </p>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
     </div>
     <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
-      crossorigin="anonymous"
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
     ></script>
+    <script>
+      google.charts.load("current", { packages: ["gauge"] });
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ["Label", "Value"],
+          ["AQI", Number("{{prediction}}")],
+        ]);
+
+        var options = {
+          width: 600,
+          height: 300,
+          max: 300,
+          redFrom: 151,
+          redTo: 300,
+          yellowFrom: 51,
+          yellowTo: 150,
+          greenFrom: 0,
+          greenTo: 50,
+          minorTicks: 5,
+        };
+
+        var chart = new google.visualization.Gauge(
+          document.getElementById("AQI-meter")
+        );
+
+        chart.draw(data, options);
+      }
+    </script>
   </body>
 </html>
