@@ -15,7 +15,7 @@ ann_model = pickle.load(open('mlModels/ann.pkl', 'rb'))
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index.html', prediction = 0)
 
 
 @app.route('/predict', methods=['POST'])
@@ -31,7 +31,7 @@ def predict():
         prediction = knn_model.predict(final_features)
     else:
         prediction = 'Something went Wrong!'
-    return render_template('index.html', prediction='AQI: {:.2f}'.format(prediction[0]), predicted=True)
+    return render_template('index.html', prediction=prediction[0], predicted=True)
 
 
 if __name__ == "__main__":
