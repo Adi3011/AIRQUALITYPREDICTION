@@ -93,7 +93,6 @@ pymongo==3.11.3
 pynput==1.7.3
 pyparsing==2.4.7
 PyPDF2==1.26.0
-pypiwin32==223
 pyppeteer==0.2.5
 PyQt5==5.15.4
 PyQt5-Qt5==5.15.2
